@@ -21,7 +21,7 @@ module RCucumber
       @narrative = narrative
     end
 
-    def self.Scenario(name)
+    def self.Scenario(name, tags = [])
       @steps_for_scenario = []
       yield
       steps = @steps_for_scenario.dup
@@ -29,7 +29,7 @@ module RCucumber
       scenario = Cucumber::Ast::Scenario.new(
         nil,
         Cucumber::Ast::Comment.new(nil),
-        Cucumber::Ast::Tags.new(nil, []),
+        Cucumber::Ast::Tags.new(nil, tags),
         'X',
         "Scenario",
         name,
