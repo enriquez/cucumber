@@ -3,6 +3,7 @@ require 'cucumber/core_ext/instance_exec'
 require 'cucumber/language_support/language_methods'
 require 'cucumber/formatter/duration'
 require 'cucumber/cli/options'
+require 'rcucumber'
 require 'timeout'
 
 module Cucumber
@@ -65,8 +66,16 @@ module Cucumber
       start = Time.new
       log.debug("Features:\n")
       feature_files.each do |f|
-        feature_file = FeatureFile.new(f)
+        feature_file = if File.extname(f) =~ /\.rb(:\d+)*$/
+          RCucumber::FeatureFile.new(f)
+        elsif File.extname(f) =~ /\.feature(:\d+)*$/
+          FeatureFile.new(f)
+        else
+          raise "invalid file extension: #{File.extname(f).inspect}"
+        end
+
         feature = feature_file.parse(options, tag_counts)
+
         if feature
           features.add_feature(feature)
           log.debug("  * #{f}\n")

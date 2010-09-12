@@ -139,6 +139,13 @@ module Cucumber
 
       def load_code_file(code_file)
         require File.expand_path(code_file) # This will cause self.add_step_definition, self.add_hook, and self.add_transform to be called from RbDsl
+        if code_file =~ /_feature.rb$/
+          klass_name = File.basename(code_file, ".rb").split("_").map { |w| w.capitalize }.join
+          klass = Class.const_get(klass_name)
+          klass.step_definitions.each_pair do |name, block|
+            register_rb_step_definition(name, block)
+          end
+        end
       end
 
       protected

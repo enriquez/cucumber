@@ -371,20 +371,24 @@ END_OF_MESSAGE
       File.stub!(:directory?).and_return(true)
       Dir.should_receive(:[]).with("feature_directory/**/*.feature").
         any_number_of_times.and_return(["cucumber.feature"])
+      Dir.should_receive(:[]).with("feature_directory/*.rb").
+        any_number_of_times.and_return(["cucumber_feature.rb"])
 
       config.parse!(%w{feature_directory/})
 
-      config.feature_files.should == ["cucumber.feature"]
+      config.feature_files.should == ["cucumber.feature", "cucumber_feature.rb"]
     end
 
     it "defaults to the features directory when no feature file are provided" do
       File.stub!(:directory?).and_return(true)
       Dir.should_receive(:[]).with("features/**/*.feature").
         any_number_of_times.and_return(["cucumber.feature"])
+      Dir.should_receive(:[]).with("features/*.rb").
+        any_number_of_times.and_return(["cucumber_feature.rb"])
 
       config.parse!(%w{})
 
-      config.feature_files.should == ["cucumber.feature"]
+      config.feature_files.should == ["cucumber.feature", "cucumber_feature.rb"]
     end
 
     it "should allow specifying environment variables on the command line" do
