@@ -54,6 +54,9 @@ module RCucumber
     def self.Then(name, &block)
       Step("Then ", name, &block)
     end
+    def self.And(name, &block)
+      Step("And ", name, &block)
+    end
 
     private
     def self.Step(keyword, name, &block)
