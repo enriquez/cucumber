@@ -22,6 +22,12 @@ module RCucumber
     end
 
     def self.Scenario(name, tags = [])
+      if tags.is_a?(Array)
+        tags = tags.map { |t| t.to_s }
+      else
+        tags = tags.to_s
+      end
+
       @steps_for_scenario = []
       yield
       steps = @steps_for_scenario.dup
